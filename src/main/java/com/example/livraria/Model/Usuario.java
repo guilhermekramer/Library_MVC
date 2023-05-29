@@ -8,9 +8,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 
 @Entity
 @Data
@@ -25,17 +28,21 @@ public class Usuario implements UserDetails {
     private Boolean isAdmin;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+         if(this.isAdmin){
+             return Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+         }else{
+             return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+         }
     }
 
     @Override
     public String getPassword() {
-        return null;
+        return this.senha;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return this.username;
     }
 
     @Override
