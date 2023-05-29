@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <table>
+        <thead>
+            <th>Nome</th>
+            <th>Autor</th>
+            <th>Ano</th>
+            <th>Valor</th>
+        </thead>
+        <tbody>
+            <tr th:each="livro : ${listaLivro}">
+
+                <td>
+                    <label th:text="${livro.nome}" ></label>
+                </td>
+                <td>
+                    <label th:text="${livro.autor}" ></label>
+                </td>
+                <td>
+                    <label th:text="${livro.ano}" ></label>
+                </td>
+                <td>
+                    <label th:text="${livro.valor}"> </label>
+                </td>
+
+                <td>
+                    <a th:href ="@{'deletarLivro/' + ${livro.id}}" role = "button"> Deletar </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
