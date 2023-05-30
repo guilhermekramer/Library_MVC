@@ -44,4 +44,8 @@ public class LivroService {
     public Optional<Livro> findById(String id){
        return repositoryLivro.findById(id);
     }
+
+    public void adicionarAoCarrinho(Livro livro) {
+
+    }
 }
