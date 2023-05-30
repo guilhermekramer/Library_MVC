@@ -13,7 +13,7 @@
             <th>Valor</th>
         </thead>
         <tbody>
-            <tr th:each="livro : ${listaLivro}">
+            <tr  th:each="livro : ${listaLivro}">
 
                 <td>
                     <label th:text="${livro.nome}" ></label>
@@ -27,6 +27,10 @@
                 <td>
                     <label th:text="${livro.valor}"> </label>
                 </td>
+
+<!--                <td>-->
+<!--                    <img th:src="/imagem/${imageUri}">-->
+<!--                </td>-->
 
                 <td>
                     <a th:href ="@{'deletarLivro/' + ${livro.id}}" role = "button"> Deletar </a>

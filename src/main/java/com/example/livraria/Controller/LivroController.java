@@ -57,6 +57,7 @@ public class LivroController {
 
     @PostMapping("/criarLivro")
     public String criarLivro(@ModelAttribute Livro livro){
+       // livro.setImageuri(file.getOriginalFilename());
         service.salvar(livro);
         return "redirect:/index";
     }

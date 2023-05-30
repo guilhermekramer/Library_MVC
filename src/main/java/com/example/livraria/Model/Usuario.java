@@ -1,9 +1,6 @@
 package com.example.livraria.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 
 @Entity
 @Data
@@ -21,18 +19,27 @@ import java.util.HashSet;
 @NoArgsConstructor
 public class Usuario implements UserDetails {
     @Id
-    @GeneratedValue (strategy = GenerationType.UUID)
-    private String id;
+    @GeneratedValue (strategy = GenerationType.AUTO)
+    @Column(columnDefinition = "bigint")
+    private Long id;
+    private String nome;
+    private String cpf;
     private String username;
     private String senha;
     private Boolean isAdmin;
 
 
+
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        if (isAdmin) {
+            return List.of(() -> "ROLE_ADMIN", () -> "ROLE_USER");
+        } else {
+            return List.of(() -> "ROLE_USER");
+        }
     }
-
     @Override
     public String getPassword() {
         return this.senha;
