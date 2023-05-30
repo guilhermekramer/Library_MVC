@@ -7,10 +7,13 @@
 </head>
 <body>
     <form method="post" th:action="@{/criarLivro}" th:object="${Livro}">
+
         Nome: <input type="text"  th:field="*{nome}"><br>
         Autor: <input type="text" th:field="*{autor}"><br>
         Ano: <input type="number" th:field="*{ano}"><br>
         Valor R$: <input type="number" th:field="*{valor}"><br>
+        Inserir uma Imagem: <input type="file" th:field="*{livro.imageuri}">
+
 
 
         <button type="submit">Submit</button>

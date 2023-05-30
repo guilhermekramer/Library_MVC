@@ -5,6 +5,7 @@ import com.example.livraria.Repository.RepositoryLivro;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 import java.util.Optional;
@@ -15,31 +16,32 @@ public class LivroService {
 
 
     @Autowired
-    private RepositoryLivro repository;
+    private RepositoryLivro repositoryLivro;
 
-    public LivroService(RepositoryLivro repository) {
-        this.repository = repository;
+    public LivroService(RepositoryLivro repositoryLivro) {
+        this.repositoryLivro = repositoryLivro;
     }
 
     public void salvar(Livro livro){
-
-
-        repository.save(livro);
+        repositoryLivro.save(livro);
     }
 
-    public List<Livro> findAll(){
-        return repository.findAll();
+    public List<Livro> findAll() {
+        return repositoryLivro.findByDeletedIsNull();
     }
 
-    public void delete(String id){
 
-        Optional<Livro> livroOptional = repository.findById(id);
+    public void delete(Long id){
+
+        Optional<Livro> livroOptional = repositoryLivro.findById(String.valueOf(id));
         Livro livro = livroOptional.get();
-        livro.setDeleted(Boolean.TRUE);
-        repository.save(livro);
+        Date dataDeletado = new Date();
+        livro.setDeleted(dataDeletado);
+        repositoryLivro.save(livro);
     }
+
 
     public Optional<Livro> findById(String id){
-       return repository.findById(id);
+       return repositoryLivro.findById(id);
     }
 }
