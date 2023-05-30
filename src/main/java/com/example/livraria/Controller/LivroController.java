@@ -88,46 +88,43 @@ public class LivroController {
         return "redirect:/listarLivro";
     }
 
-            carrinho.add(livro);
 
-
-            session.setAttribute("carrinho", carrinho);
-        }
-        return "redirect:/index";
-    }
-
-    @GetMapping("/verCarrinho")
-    public String verCarrinho(Model model, @Autowired HttpServletResponse response, Long id) {
-        Optional<Livro> carrinho = service.findById(String.valueOf(id));
-        model.addAttribute("carrinho", carrinho);
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd--MM--yyyy_HH::mm:ss");
-        String visitaDate = dateFormat.format(new Date());
-
-        Cookie cookie = new Cookie("visita", visitaDate);
-        cookie.setMaxAge(24 * 60 * 60);
-        response.addCookie(cookie);
-
-        return "verCarrinho";
-    }
-
-
-
-
-
-    @GetMapping("/adicionarCarrinho/{id}")
-    public String adicionarCarrinho(@PathVariable("id") Long id) {
-        Optional<Livro> livroOptional = service.findById(String.valueOf(id));
-        if (livroOptional.isPresent()) {
-            Livro livro = livroOptional.get();
-
-            List<Livro> carrinho = (List<Livro>) session.getAttribute("carrinho");
-            if (carrinho == null) {
-                carrinho = new ArrayList<>();
-            }
 
 
 }
+//
+//    @GetMapping("/verCarrinho")
+//    public String verCarrinho(Model model, @Autowired HttpServletResponse response, Long id) {
+//        Optional<Livro> carrinho = service.findById(String.valueOf(id));
+//        model.addAttribute("carrinho", carrinho);
+//
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("dd--MM--yyyy_HH::mm:ss");
+//        String visitaDate = dateFormat.format(new Date());
+//
+//        Cookie cookie = new Cookie("visita", visitaDate);
+//        cookie.setMaxAge(24 * 60 * 60);
+//        response.addCookie(cookie);
+//
+//        return "verCarrinho";
+//    }
+//
+//
+//
+//
+//
+//    @GetMapping("/adicionarCarrinho/{id}")
+//    public String adicionarCarrinho(@PathVariable("id") Long id) {
+//        Optional<Livro> livroOptional = service.findById(String.valueOf(id));
+//        if (livroOptional.isPresent()) {
+//            Livro livro = livroOptional.get();
+//
+//            List<Livro> carrinho = (List<Livro>) session.getAttribute("carrinho");
+//            if (carrinho == null) {
+//                carrinho = new ArrayList<>();
+//            }
+//
+
+
 
 
 //    @GetMapping("/adicionarCarrinho/{id}")

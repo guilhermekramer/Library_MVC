@@ -30,6 +30,8 @@
 
                 <td>
                     <a th:href ="@{'deletarLivro/' + ${livro.id}}" role = "button"> Deletar </a>
+                    <a th:href="@{'/adicionarCarrinho/' + ${livro.id}}">Adicionar ao Carrinho</a>
+
                 </td>
             </tr>
         </tbody>
