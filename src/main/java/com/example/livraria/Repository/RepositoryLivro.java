@@ -11,4 +11,7 @@ public interface RepositoryLivro extends JpaRepository<Livro, String> {
 
 
     List<Livro> findByDeletedIsNull();
+
+
+    List<Livro> findByOnCar(boolean b);
 }

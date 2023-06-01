@@ -47,4 +47,7 @@ public class LivroService {
     }
 
 
+    public List<Livro> findByOnCar(boolean b) {
+        return repositoryLivro.findByOnCar(b);
+    }
 }

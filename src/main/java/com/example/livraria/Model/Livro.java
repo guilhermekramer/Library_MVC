@@ -29,6 +29,7 @@ public class Livro {
     private float valor;
     private String imageuri;
     private Date deleted;
+    private Boolean onCar;
 
 
 }    

@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 @Service
 public class FileStorageServer {
 
-    private final Path root = Paths.get("Livraria2/src/main/images");
+    private final Path root = Paths.get("Livraria2/src/main/images/");
 
     public FileStorageServer() {
     }

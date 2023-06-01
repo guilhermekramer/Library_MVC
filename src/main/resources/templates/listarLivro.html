@@ -16,6 +16,9 @@
             <tr th:each="livro : ${listaLivro}">
 
                 <td>
+                    <label hidden="hidden" th:text="${livro.id}"> </label>
+                </td>
+                <td>
                     <label th:text="${livro.nome}" ></label>
                 </td>
                 <td>
@@ -29,11 +32,21 @@
                 </td>
 
                 <td>
-                    <a th:href ="@{'deletarLivro/' + ${livro.id}}" role = "button"> Deletar </a>
-                    <a th:href="@{'/adicionarCarrinho/' + ${livro.id}}">Adicionar ao Carrinho</a>
-
+                    <label th:text="${livro.imageuri}">  </label>
                 </td>
+
+
+                    <td>
+                        <a th:href="@{'/deletarLivro/' + ${livro.id}}" role="button">Deletar</a>
+                        <a th:href="@{'/listarLivro/' + ${livro.id}}">  Adicionar ao Carrinho</a>
+
+                        <a th:href="@{'/verCarrinho'}"> Ver Carrinho</a>
+
+                    </td>
+
             </tr>
+
+
         </tbody>
     </table>
 </body>
