@@ -23,6 +23,7 @@ public class LivroService {
     }
 
     public void salvar(Livro livro){
+
         repositoryLivro.save(livro);
     }
 
@@ -45,7 +46,5 @@ public class LivroService {
        return repositoryLivro.findById(id);
     }
 
-    public void adicionarAoCarrinho(Livro livro) {
 
-    }
 }

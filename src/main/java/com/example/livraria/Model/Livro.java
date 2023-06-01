@@ -27,7 +27,7 @@ public class Livro {
     private String autor;
     private Integer ano;
     private float valor;
-    private String Imageuri;
+    private String imageuri;
     private Date deleted;
 
 

@@ -28,10 +28,6 @@ public class Usuario implements UserDetails {
     private String senha;
     private Boolean isAdmin;
 
-
-
-
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (isAdmin) {
