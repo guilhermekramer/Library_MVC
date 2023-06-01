@@ -3,6 +3,7 @@ package com.example.livraria.Controller;
 
 import com.example.livraria.Model.Livro;
 import com.example.livraria.Repository.RepositoryLivro;
+import com.example.livraria.Service.FileStorageServer;
 import com.example.livraria.Service.LivroService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,14 +34,13 @@ import java.util.Optional;
 public class LivroController {
 
 
-    private final HttpSession session;
-    LivroService service;
-    private HttpServletResponse response;
-    private List<Livro> carrinho = new ArrayList<>();
 
-    public LivroController(LivroService service, HttpSession session) {
+    LivroService service;
+    FileStorageServer fileStorageServer;
+
+    public LivroController(LivroService service, FileStorageServer fileStorageServer) {
         this.service = service;
-        this.session = session;
+        this.fileStorageServer = fileStorageServer;
     }
 
     @GetMapping("/index")
@@ -56,19 +57,13 @@ public class LivroController {
         return "cadastrarLivro";
     }
 
-//    @PostMapping("/livros/{id}/imageuri")
-//    public void salvarImagem(@ModelAttribute Livro livro, @RequestParam("imagem") MultipartFile imageuri)  {
-//        livro = service.findById(String.valueOf(id)).orElseThrow(() -> new RuntimeException("Livro não encontrado"));
-//
-//        livro.setImageuri(imageuri.getOriginalFilename());
-//
-//        service.salvar(livro);
-//    }
 
     @PostMapping("/criarLivro")
-    public String criarLivro(@ModelAttribute Livro livro){
-       // livro.setImageuri(file.getOriginalFilename());
-        service.salvar(livro);
+    public String criarLivro(@ModelAttribute Livro livro, @RequestParam("file") MultipartFile file) throws IOException {
+        livro.setImageuri(file.getOriginalFilename());
+
+        this.service.salvar(livro);
+        this.fileStorageServer.salvar(file);
         return "redirect:/index";
     }
 
@@ -88,65 +83,9 @@ public class LivroController {
         return "redirect:/listarLivro";
     }
 
-            carrinho.add(livro);
-
-
-            session.setAttribute("carrinho", carrinho);
-        }
-        return "redirect:/index";
-    }
-
-    @GetMapping("/verCarrinho")
-    public String verCarrinho(Model model, @Autowired HttpServletResponse response, Long id) {
-        Optional<Livro> carrinho = service.findById(String.valueOf(id));
-        model.addAttribute("carrinho", carrinho);
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd--MM--yyyy_HH::mm:ss");
-        String visitaDate = dateFormat.format(new Date());
-
-        Cookie cookie = new Cookie("visita", visitaDate);
-        cookie.setMaxAge(24 * 60 * 60);
-        response.addCookie(cookie);
-
-        return "verCarrinho";
-    }
-
-
-
-
-
-    @GetMapping("/adicionarCarrinho/{id}")
-    public String adicionarCarrinho(@PathVariable("id") Long id) {
-        Optional<Livro> livroOptional = service.findById(String.valueOf(id));
-        if (livroOptional.isPresent()) {
-            Livro livro = livroOptional.get();
-
-            List<Livro> carrinho = (List<Livro>) session.getAttribute("carrinho");
-            if (carrinho == null) {
-                carrinho = new ArrayList<>();
-            }
-
 
 }
 
 
-//    @GetMapping("/adicionarCarrinho/{id}")
-//    public String adicionarCarrinho(@PathVariable("id") Long id) {
-//        Optional<Livro> livroOptional = service.findById(String.valueOf(id));
-//        List<Livro> carrinho = new ArrayList<>();
-//        if (livroOptional.isPresent()) {
-//            Livro livro = livroOptional.get();
-//            carrinho.add(livro);
-//        }
-//        return "verCarrinho";
-//    }
 
-//    @GetMapping("/adicionarCarrinho/{id}")
-//    public String adicionarCarrinho(@PathVariable("id") Long id) {
-//        Optional<Livro> livroOptional = service.findById(String.valueOf(id));
-//        if (livroOptional.isPresent()) {
-//            Livro livro = livroOptional.get();
-//            carrinho.add(livro);
-//        }
-//        return "redirect:/verCarrinho";
-//    }
+
