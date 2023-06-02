@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 @Service
 public class FileStorageServer {
 
-    private final Path root = Paths.get("Livraria2/src/main/images/");
+    private final Path root = Paths.get("./src/main/resources/images/");
 
     public FileStorageServer() {
     }
@@ -31,8 +31,11 @@ public class FileStorageServer {
         }
     }
 
-    public void salvar(MultipartFile file) throws IOException {
+    public String salvar(MultipartFile file) throws IOException {
+        String caminho = String.valueOf(this.root.resolve(file.getOriginalFilename()));
         Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
+
+        return caminho;
     }
 
     public Resource load(String filename){

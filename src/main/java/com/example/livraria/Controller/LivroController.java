@@ -4,6 +4,10 @@ package com.example.livraria.Controller;
 import com.example.livraria.Model.Livro;
 import com.example.livraria.Service.FileStorageServer;
 import com.example.livraria.Service.LivroService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,23 +23,27 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
+@RequiredArgsConstructor
 public class LivroController {
 
 
 
-    LivroService service;
-    FileStorageServer fileStorageServer;
+    private final LivroService service;
+    private final FileStorageServer fileStorageServer;
 
-    public LivroController(LivroService service, FileStorageServer fileStorageServer) {
-        this.service = service;
-        this.fileStorageServer = fileStorageServer;
-    }
+    @GetMapping(value ={ "/index", "/"})
+    public String getIndex(Model model, HttpServletResponse response, HttpServletRequest request){
+        HttpSession sessao = request.getSession();
 
-    @GetMapping("/index")
-    public String getIndex(Model model){
-        List<Livro> ListaLivros = new ArrayList<>();
-        model.addAttribute("livros", ListaLivros);
-        return "index.html";
+        ArrayList<Livro> arraylivro = (ArrayList<Livro>) service.findByOnCar(Boolean.parseBoolean("TRUE"));
+        List<Livro> listaLivro = service.findAll();
+        int qntlivros = 0;
+        if(arraylivro!=null){
+            qntlivros = arraylivro.size();
+        }
+        model.addAttribute("listaLivro", listaLivro);
+        model.addAttribute("qntlivros", qntlivros);
+        return "index";
     }
 
     @GetMapping("/cadastrarLivro")
@@ -47,10 +55,11 @@ public class LivroController {
 
 
     @PostMapping("/criarLivro")
-    public String criarLivro(@ModelAttribute Livro livro) {
-        //livro.setImageuri(file.getOriginalFilename());
+    public String criarLivro(@ModelAttribute Livro livro, @RequestParam("file") MultipartFile file) throws IOException {
+        String caminho = this.fileStorageServer.salvar(file);
+        livro.setImageuri("/images/".concat(file.getOriginalFilename()));
         this.service.salvar(livro);
-        //this.fileStorageServer.salvar(file);
+
         return "redirect:/index";
     }
 
