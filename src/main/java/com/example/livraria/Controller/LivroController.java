@@ -4,6 +4,7 @@ package com.example.livraria.Controller;
 import com.example.livraria.Model.Livro;
 import com.example.livraria.Service.FileStorageServer;
 import com.example.livraria.Service.LivroService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -18,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -65,12 +68,21 @@ public class LivroController {
 
 
     @GetMapping("/verCarrinho")
-    public String verCarrinho(Model model) {
+    public String verCarrinho(Model model, HttpServletResponse response) {
         List<Livro> carrinho = service.findByOnCar(true); // Supondo que você tenha um serviço para lidar com os livros
         model.addAttribute("carrinho", carrinho);
+
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        String dataHoraAcesso = now.format(formatter);
+        String cookieValue = dataHoraAcesso.replaceAll("\\s+", "").replaceAll("[^\\x20-\\x7E]", "");
+
+        Cookie cookie = new Cookie("visita", cookieValue);
+        cookie.setMaxAge(24 * 60 * 60);
+        response.addCookie(cookie);
+
         return "verCarrinho";
     }
-
 
     @GetMapping("/listarLivro/{id}")
     public String adicionarCarrinho(@PathVariable("id") Long id) {
