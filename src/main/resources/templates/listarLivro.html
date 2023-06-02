@@ -1,53 +1,72 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+
     <title>Title</title>
 </head>
 <body>
-    <table>
-        <thead>
-            <th>Nome</th>
-            <th>Autor</th>
-            <th>Ano</th>
-            <th>Valor</th>
-        </thead>
-        <tbody>
-            <tr th:each="livro : ${listaLivro}">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" href="#!">Biblioteca </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                <li class="nav-item"><a class="nav-link active" aria-current="page" action="#" th:href="@{/listarLivro}"> Acervo </a></li>
+                <li class="nav-item"><a class="nav-link active" aria-current="page" action = '#' th:href="@{/cadastrarLivro}"> Cadastrar Livro </a></li>
+                <li class="nav-item"><a class="nav-link active" aria-current="page" action = '#' th:href="@{/cadastrarUsuario}"> Cadastrar Usuário</a></li>
+            </ul>
 
-                <td>
-                    <label hidden="hidden" th:text="${livro.id}"> </label>
-                </td>
-                <td>
-                    <label th:text="${livro.nome}" ></label>
-                </td>
-                <td>
-                    <label th:text="${livro.autor}" ></label>
-                </td>
-                <td>
-                    <label th:text="${livro.ano}" ></label>
-                </td>
-                <td>
-                    <label th:text="${livro.valor}"> </label>
-                </td>
+        </div>
+    </div>
+</nav>
 
-                <td>
-                    <img th:src="@{'/images/'+${livro.imageuri}}" alt="...">
-                </td>
+<!-- Header-->
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Livraria Leitura</h1>
+        </div>
+    </div>
+</header>
 
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            <div th:each="livro : ${listaLivro}" th:object="${livro}">
+                <div class="col mb-5">
+                    <div class="card h-100">
+                        <!-- Product image-->
+                        <!--                        <img class="card-img-top" th:src="@{'/images/'+*{livro.fotouri}}" alt="..." />-->
+                        <!-- Product details-->
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <!-- Product name-->
+                                <h5 class="fw-bolder" th:text="*{nome}"></h5>
+                                <!-- Product price-->
+                                <h6 class="fw-bolder" th:text="*{autor}"></h6>
+                                <h6 class="fw-bolder" th:text="*{valor}"></h6>
+                            </div>
+                        </div>
+                        <!-- Product actions-->
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center">
+                                <a class="btn btn-outline-dark mt-auto" th:href="@{'/listarLivro/' + ${livro.id}}" >Adicionar ao Carrinho</a>
+                                <br>
+                                <br>
+                                <a class="btn btn-outline-dark mt-auto" th:href="@{'/deletarLivro/' + ${livro.id}}" role="button">Deletar</a>
+                                <br>
+                                <br>
+                                <a class="btn btn-outline-dark mt-auto" th:href="@{'/verCarrinho'}"> Ver Carrinho</a>
 
-                    <td>
-                        <a th:href="@{'/deletarLivro/' + ${livro.id}}" role="button">Deletar</a>
-                        <a th:href="@{'/listarLivro/' + ${livro.id}}">  Adicionar ao Carrinho</a>
-
-                        <a th:href="@{'/verCarrinho'}"> Ver Carrinho</a>
-
-                    </td>
-
-            </tr>
-
-
-        </tbody>
-    </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 </body>
 </html>
