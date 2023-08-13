@@ -26,7 +26,7 @@ public class Livro {
     private String nome;
     private String autor;
     private Integer ano;
-    private float valor;
+    private Integer valor;
     private String imageuri;
     private Date deleted;
     private Boolean onCar;

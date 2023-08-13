@@ -6,24 +6,38 @@
     <title>Livraria</title>
 </head>
 <body>
-    <form method="post" th:action="@{/criarLivro}" th:object="${Livro}" enctype="multipart/form-data">
 
-        <ul th:if="${#fields.hasErrors()}">
-            <th:block th:each="error : ${#fields.errors()}">
-                <li th:text="${error}"></li>
-            </th:block>
-        </ul>
+<!-- Navigation-->
 
-        Nome: <input type="text"  th:field="*{nome}" ><br>
-        Autor: <input type="text" th:field="*{autor}"><br>
-        Ano: <input type="number" th:field="*{ano}"><br>
-        Valor R$: <input type="number" th:field="*{valor}"><br>
-        Inserir uma Imagem: <input type="file" name="file">
+<div th:replace="/fragments/commons :: nav"></div>
 
+<!-- Header-->
 
+<div th:replace="/fragments/commons :: header" ></div>
 
-        <button type="submit">Submit</button>
+        <form style="padding: 10px" th:method="POST" th:action="@{/criarLivro}" th:object="${Livro}" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label  class="form-label">Nome: </label>
+                <input style="width: 400px" type="text" class="form-control"  th:field="*{nome}" aria-describedby="emailHelp">
+            </div>
 
-    </form>
+            <div class="mb-3">
+                <label  class="form-label" >Autor:  </label>
+                <input style="width: 400px" type="text" class="form-control"  aria-describedby="emailHelp" th:field="*{autor}">
+            </div>
+
+            <div class="mb-3">
+                <label  class="form-label" >Ano: </label>
+                <input style="width: 400px"  type="text" class="form-control"  aria-describedby="emailHelp" th:field="*{ano}">
+            </div>
+
+            <div class="mb-3">
+                <label  class="form-label" >Valor: </label>
+                <input style="width: 400px" type="text" class="form-control"  aria-describedby="emailHelp" th:field="*{valor}">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
 </body>
 </html>

@@ -2,7 +2,7 @@ package com.example.livraria.Controller;
 
 
 import com.example.livraria.Model.Livro;
-import com.example.livraria.Service.FileStorageServer;
+
 import com.example.livraria.Service.LivroService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.multipart.MultipartFile;
+
 
 
 import java.io.IOException;
@@ -32,12 +32,11 @@ public class LivroController {
 
 
     private final LivroService service;
-    private final FileStorageServer fileStorageServer;
+
 
     @GetMapping(value ={ "/index", "/"})
     public String getIndex(Model model, HttpServletResponse response, HttpServletRequest request){
         HttpSession sessao = request.getSession();
-
         ArrayList<Livro> arraylivro = (ArrayList<Livro>) service.findByOnCar(Boolean.parseBoolean("TRUE"));
         List<Livro> listaLivro = service.findAll();
         int qntlivros = 0;
@@ -58,36 +57,23 @@ public class LivroController {
 
 
     @PostMapping("/criarLivro")
-    public String criarLivro(@ModelAttribute Livro livro, @RequestParam("file") MultipartFile file) throws IOException {
-        String caminho = this.fileStorageServer.salvar(file);
-        livro.setImageuri("/images/".concat(file.getOriginalFilename()));
-        this.service.salvar(livro);
+    public String criarLivro(@ModelAttribute Livro livro) {
 
+        this.service.salvar(livro);
         return "redirect:/index";
     }
 
 
     @GetMapping("/verCarrinho")
-    public String verCarrinho(Model model, HttpServletResponse response) {
-        List<Livro> carrinho = service.findByOnCar(true); // Supondo que você tenha um serviço para lidar com os livros
+    public String verCarrinho(Model model) {
+        List<Livro> carrinho = service.findByOnCar(true);
         model.addAttribute("carrinho", carrinho);
-
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        String dataHoraAcesso = now.format(formatter);
-        String cookieValue = dataHoraAcesso.replaceAll("\\s+", "").replaceAll("[^\\x20-\\x7E]", "");
-
-        Cookie cookie = new Cookie("visita", cookieValue);
-        cookie.setMaxAge(24 * 60 * 60);
-        response.addCookie(cookie);
-
         return "verCarrinho";
     }
 
     @GetMapping("/listarLivro/{id}")
     public String adicionarCarrinho(@PathVariable("id") Long id) {
         Optional<Livro> livroOptional = service.findById(String.valueOf(id));
-
         if (livroOptional.isPresent()) {
             Livro livro = livroOptional.get();
             livro.setOnCar(true);
@@ -96,6 +82,7 @@ public class LivroController {
         }
         return "redirect:/listarLivro";
     }
+
 
     @GetMapping("/listarLivro")
     public String listarLivro(Model model){
@@ -107,8 +94,9 @@ public class LivroController {
 
     @GetMapping("/deletarLivro/{id}")
     public String deletarLivro(@PathVariable("id")  Long id){
-        if(service.findById(String.valueOf(id)) != null){
+        if(service.findById(String.valueOf(id)) != null ){
             service.delete(id);
+
         }
         return "redirect:/listarLivro";
     }
